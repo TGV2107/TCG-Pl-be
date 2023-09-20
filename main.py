@@ -28,9 +28,9 @@ with open("Data/Cards.csv") as file:
 
     Cards = []
     for row in r:
-        IP, Name, Cost, Type, Health, Attack, Rarity = row
+        IP, Name, Type, Cost, Health, Attack, Rarity, Class = row
         IP, Cost, Health, Attack = int(IP), int(Cost), int(Health), int(Attack)
-        Cards.append(Card(IP, Name, Cost, Type, Health, Attack, Rarity))
+        Cards.append(Card(IP, Name, Type, Cost, Health, Attack, Rarity, Class))
 
 with open("Data/Collection.csv") as file:
     
@@ -38,9 +38,9 @@ with open("Data/Collection.csv") as file:
     
     OwnedCards = []
     for row in r:
-        IP, Name, Cost, Type, Health, Attack, Rarity = row
+        IP, Name, Type, Cost, Health, Attack, Rarity, Class = row
         IP, Cost, Health, Attack = int(IP), int(Cost), int(Health), int(Attack)
-        OwnedCards.append(Card(IP, Name, Cost, Type, Health, Attack, Rarity))
+        OwnedCards.append(Card(IP, Name, Type, Cost, Health, Attack, Rarity, Class))
 
 #initialisation :
 

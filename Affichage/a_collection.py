@@ -1,15 +1,17 @@
 #importation des utilitaires:
 
-import pygame
+import csv
 import math
 import os
-import csv
+
+import pygame
+
+from Class.Button import *
+from Class.Card import *
+from Class.CardRect import *
 
 #importation des classes:
 
-from Class.Card import *
-from Class.CardRect import *
-from Class.Button import *
 
 #fonction d'affichage de la page de collection:
 
@@ -28,7 +30,7 @@ def affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_
         
         #affichage des cartes
         carte = OwnedCards[Ncarte]        
-        carteRect = CardRect(carte, (posx, posy),(94.5,132), pygame.image.load("Assets/img/Cartes/"+carte.getName()+".png"))
+        carteRect = CardRect(carte, (posx, posy),(94.5,132), pygame.image.load("Assets/img/Cartes/"+carte.Name+".png"))
                 
         carteRect.Blit(screen)
 
@@ -49,7 +51,7 @@ def affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_
         
         #affichage de la carte
 
-        looked_card_rect = CardRect(looked_card, (303.75, 30.0),(472.5, 660), pygame.image.load("Assets/img/Cartes/"+looked_card.getName()+".png"))    
+        looked_card_rect = CardRect(looked_card, (303.75, 30.0),(472.5, 660), pygame.image.load("Assets/img/Cartes/"+looked_card.Name+".png"))    
         looked_card_rect.Blit(screen)
                 
     #affichage bouton page suivante
@@ -84,9 +86,9 @@ def affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_
                 
                 for card in r2:
                     
-                    IP, Name, Cost, Type, Health, Attack, Rarity = card
+                    IP, Name, Type, Cost, Health, Attack, Rarity, Class = card
                     IP, Cost, Health, Attack = int(IP), int(Cost), int(Health), int(Attack)
-                    Deck_cards.append(Card(IP, Name, Cost, Type, Health, Attack, Rarity))
+                    Deck_cards.append(Card(IP, Name, Type, Cost, Health, Attack, Rarity, Class))
                 
             Decks[row[0]] = Deck_cards    
         
