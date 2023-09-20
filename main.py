@@ -28,9 +28,9 @@ with open("Data/Cards.csv") as file:
 
     Cards = []
     for row in r:
-        IP, Name, Type, Cost, Health, Attack, Rarity, Class = row
-        IP, Cost, Health, Attack = int(IP), int(Cost), int(Health), int(Attack)
-        Cards.append(Card(IP, Name, Type, Cost, Health, Attack, Rarity, Class))
+        ID, Name, Type, Cost, Health, Attack, Rarity, Class = row
+        ID, Cost, Health, Attack = int(ID), int(Cost), int(Health), int(Attack)
+        Cards.append(Card(ID, Name, Type, Cost, Health, Attack, Rarity, Class))
 
 with open("Data/Collection.csv") as file:
     
@@ -38,9 +38,9 @@ with open("Data/Collection.csv") as file:
     
     OwnedCards = []
     for row in r:
-        IP, Name, Type, Cost, Health, Attack, Rarity, Class = row
-        IP, Cost, Health, Attack = int(IP), int(Cost), int(Health), int(Attack)
-        OwnedCards.append(Card(IP, Name, Type, Cost, Health, Attack, Rarity, Class))
+        ID, Name, Type, Cost, Health, Attack, Rarity, Class = row
+        ID, Cost, Health, Attack = int(ID), int(Cost), int(Health), int(Attack)
+        OwnedCards.append(Card(ID, Name, Type, Cost, Health, Attack, Rarity, Class))
 
 #initialisation :
 
@@ -73,19 +73,14 @@ while running:
     
     if game.getScreen() == "main": #affichage de main
 
-        newRects = affichage_main(screen)
+        rectList = affichage_main(screen)
 
-        for rect in newRects:
 
-            rectList.append(rect)
     
     elif game.getScreen() == "collection": #affichage de la collection
             
-        rectCards, newRects = affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_card)
+        rectCards, rectList = affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_card)
 
-        for rect in newRects:
-
-            rectList.append(rect)
 
     #détection des événements
     for event in pygame.event.get():
@@ -99,6 +94,7 @@ while running:
         #événement si souris cliquée
         elif event.type == pygame.MOUSEBUTTONDOWN:
             
+            #recherche de l'élément cliqué
             rectName = None
             for val in rectList:
 
@@ -107,10 +103,12 @@ while running:
                 if rect.collidepoint(event.pos):
 
                     rectName = name
-            
+
+            #événements des pages
+
             if game.getScreen() == "main": #événements de la page main
                 
-                if rectName == "main_goTo_Collection":
+                if rectName == "main_goTo_Collection": #bouton go to collection -> envoie vers la page de collection
                 
                     game.Screen = "collection"
                     page_collection = 0
@@ -124,14 +122,14 @@ while running:
                         
                         rect, card = rectCard
                         
-                        
                         if rect.collidepoint(event.pos):
                                 
                             looked_card = card
                             looked_rect = rect
                             isLooking = True
+
                         
-                    #Boutons next et previous page :
+                    #Boutons next et previous page -> ajoute ou retire 1 au numéro de la page de la collection
                         
                     if rectName == "collection_buttonNextPage":
                             
@@ -151,13 +149,13 @@ while running:
                                 
                             page_collection = page_collection - 1
                         
-                    #Bouton add deck :
+                    #Bouton add deck -> permet d'ajouter un deck nommé "Nouveau deck"      NON FONCTIONNEL
                         
                     elif rectName == "collection_buttonAddDeck":
                             
                         print("add deck")
                     
-                #Fin du zoom:
+                #Fin du zoom -> si autre chose que la carte zommé est cliqué -> la carte est enlevé
                 elif (isLooking == True) and (not rectName == "collection_looked_card"):
                         
                     isLooking = False
