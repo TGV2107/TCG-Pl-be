@@ -64,6 +64,8 @@ running = True
 #boucle d'actualisation
 while running:
     
+    rectList = [] #liste des rects présent sur la page
+
     pygame.display.flip()
     screen.fill(game.getBackground())
     
@@ -71,22 +73,21 @@ while running:
     
     if game.getScreen() == "main": #affichage de main
 
-        main_goToCollection_rect = affichage_main(screen)
-    
-        """
-        paramètres : screen
-        return : goToCollection.rect
-        """
+        newRects = affichage_main(screen)
+
+        for rect in newRects:
+
+            rectList.append(rect)
     
     elif game.getScreen() == "collection": #affichage de la collection
             
-        rectCards, looked_card_rect, collection_buttonNextPage_rect, collection_buttonPreviousPage_rect, collection_buttonAddDeck_rect = affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_card)
-            
-        """
-        paramètres : screen, Owned Cards, page_collection, isLooking, looked_card
-        return : rectCards, looked_card_rect, buttonNextPage.rect, buttonPreviousPage.rect, buttonAddDeck.rect
-        """
-    #détection des événements                          
+        rectCards, newRects = affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_card)
+
+        for rect in newRects:
+
+            rectList.append(rect)
+
+    #détection des événements
     for event in pygame.event.get():
         
         #événement de fermeture de la page pygame
@@ -98,10 +99,18 @@ while running:
         #événement si souris cliquée
         elif event.type == pygame.MOUSEBUTTONDOWN:
             
-                
+            rectName = None
+            for val in rectList:
+
+                name, rect = val
+
+                if rect.collidepoint(event.pos):
+
+                    rectName = name
+            
             if game.getScreen() == "main": #événements de la page main
                 
-                if main_goToCollection_rect.collidepoint(event.pos):
+                if rectName == "main_goTo_Collection":
                 
                     game.Screen = "collection"
                     page_collection = 0
@@ -124,7 +133,7 @@ while running:
                         
                     #Boutons next et previous page :
                         
-                    if collection_buttonNextPage_rect.collidepoint(event.pos):
+                    if rectName == "collection_buttonNextPage":
                             
                         Npages = ((len(OwnedCards)-1)/10) -1
                             
@@ -136,7 +145,7 @@ while running:
                                 
                             page_collection = page_collection + 1
                             
-                    elif collection_buttonPreviousPage_rect.collidepoint(event.pos):
+                    elif rectName == "collection_buttonPreviousPage":
                             
                         if page_collection > 0:
                                 
@@ -144,12 +153,12 @@ while running:
                         
                     #Bouton add deck :
                         
-                    elif collection_buttonAddDeck_rect.collidepoint(event.pos):
+                    elif rectName == "collection_buttonAddDeck":
                             
                         print("add deck")
                     
                 #Fin du zoom:
-                elif (isLooking == True) and (not looked_card_rect.rect.collidepoint(event.pos)):
+                elif (isLooking == True) and (not rectName == "collection_looked_card"):
                         
                     isLooking = False
     

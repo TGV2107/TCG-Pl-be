@@ -17,6 +17,7 @@ from Class.CardRect import *
 
 def affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_card):
     
+    rects = []
     rectCards = []
     posx, posy = 180, 180
     
@@ -29,15 +30,15 @@ def affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_
     for Ncarte in range (Ip, max_Ip): #affichage de chaque carte et enregistrement
         
         #affichage des cartes
-        carte = OwnedCards[Ncarte]        
+        carte = OwnedCards[Ncarte]
         carteRect = CardRect(carte, (posx, posy),(94.5,132), pygame.image.load("Assets/img/Cartes/"+carte.Name+".png"))
                 
         carteRect.Blit(screen)
 
-        #ajout de la carte à la liste des cartes affichées        
+        #ajout de la carte à la liste des cartes affichées
         rectCards.append((carteRect.rect,carte))
         
-        #incrémentation des coordonnées     
+        #incrémentation des coordonnées
         posx = posx + 180
                     
         if posx == 1080:
@@ -53,16 +54,19 @@ def affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_
 
         looked_card_rect = CardRect(looked_card, (303.75, 30.0),(472.5, 660), pygame.image.load("Assets/img/Cartes/"+looked_card.Name+".png"))    
         looked_card_rect.Blit(screen)
+        rects.append(("collection_looked_card",looked_card_rect.rect))
                 
     #affichage bouton page suivante
     
     buttonNextPage = Button("->", pygame.font.SysFont("Comic Sans MS", 10, bold=True), (255,255,255), (100,50), (900,600), pygame.image.load("Assets/img/bouton_collection.png"))
     buttonNextPage.Blit(screen)
+    rects.append(("collection_buttonNextPage",buttonNextPage.rect))
             
     #affichage bouton page précédente
     
     buttonPreviousPage = Button("<-", pygame.font.SysFont("Comic Sans MS", 10, bold=True), (255,255,255), (100,50), (800,600), pygame.image.load("Assets/img/bouton_collection.png"))
     buttonPreviousPage.Blit(screen)
+    rects.append(("collection_buttonPreviousPage",buttonPreviousPage.rect))
 
     #récupération des decks
     
@@ -90,7 +94,7 @@ def affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_
                     IP, Cost, Health, Attack = int(IP), int(Cost), int(Health), int(Attack)
                     Deck_cards.append(Card(IP, Name, Type, Cost, Health, Attack, Rarity, Class))
                 
-            Decks[row[0]] = Deck_cards    
+            Decks[row[0]] = Deck_cards
         
     #affichage des decks
     
@@ -112,6 +116,7 @@ def affichage_collection(screen, OwnedCards, page_collection, isLooking, looked_
 
     buttonAddDeck = Button("Add deck", pygame.font.SysFont("Comic Sans MS", 10, bold=True), (255,255,255), (100,50), (0,0), pygame.image.load("Assets/img/bouton_collection.png"))
     buttonAddDeck.Blit(screen)
+    rects.append(("collection_buttonAddDeck",buttonAddDeck.rect))
     
     #return
-    return rectCards, looked_card_rect, buttonNextPage.rect, buttonPreviousPage.rect, buttonAddDeck.rect
+    return rectCards, rects
